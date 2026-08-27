@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="Quadro acadêmico responsivo para organização de tarefas."
+    >
+    <title>Plano de Estudos | Quadro Acadêmico</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#quadro">Pular para o quadro</a>
+
+    <header class="cabecalho">
+      <div class="cabecalho__marca">
+        <span class="cabecalho__simbolo" aria-hidden="true">PE</span>
+        <div>
+          <p class="cabecalho__legenda">Semestre 2026.2</p>
+          <h1>Plano de Estudos</h1>
+        </div>
+      </div>
+
+      <div class="cabecalho__resumo">
+        <strong>8 tarefas</strong>
+        <span>2 para esta semana</span>
+      </div>
+    </header>
+
+    <main class="conteudo" id="quadro">
+      <section class="controles" aria-labelledby="titulo-controles">
+        <div class="controles__titulo">
+          <p class="introducao__marcador">Encontre uma tarefa</p>
+          <h2 id="titulo-controles">Busca e filtros</h2>
+        </div>
+
+        <form class="filtros" action="#quadro" method="get">
+          <div class="campo-busca">
+            <label for="busca">Buscar por título</label>
+            <input id="busca" name="busca" type="search" autocomplete="off">
+          </div>
+
+          <fieldset>
+            <legend>Status</legend>
+            <div class="opcoes">
+              <input id="status-todos" name="status" type="radio" value="todos" checked>
+              <label for="status-todos">Todos</label>
+              <input id="status-fazer" name="status" type="radio" value="a-fazer">
+              <label for="status-fazer">A fazer</label>
+              <input id="status-andamento" name="status" type="radio" value="em-andamento">
+              <label for="status-andamento">Em andamento</label>
+              <input id="status-revisao" name="status" type="radio" value="em-revisao">
+              <label for="status-revisao">Em revisão</label>
+              <input id="status-concluida" name="status" type="radio" value="concluida">
+              <label for="status-concluida">Concluída</label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Prioridade</legend>
+            <div class="opcoes">
+              <input id="prioridade-todas" name="prioridade" type="radio" value="todas" checked>
+              <label for="prioridade-todas">Todas</label>
+              <input id="prioridade-baixa" name="prioridade" type="radio" value="baixa">
+              <label for="prioridade-baixa">Baixa</label>
+              <input id="prioridade-media" name="prioridade" type="radio" value="media">
+              <label for="prioridade-media">Média</label>
+              <input id="prioridade-alta" name="prioridade" type="radio" value="alta">
+              <label for="prioridade-alta">Alta</label>
+            </div>
+          </fieldset>
+        </form>
+      </section>
+
+      <div class="introducao">
+        <div>
+          <p class="introducao__marcador">Visão geral</p>
+          <h2>Seu ritmo, em perspectiva.</h2>
+        </div>
+        <p>Organize as entregas por etapa e acompanhe o avanço do semestre.</p>
+      </div>
+
+      <div class="quadro">
+        <section class="coluna coluna--a-fazer" id="a-fazer" aria-labelledby="titulo-a-fazer">
+          <header class="coluna__cabecalho">
+            <span class="coluna__indicador" aria-hidden="true"></span>
+            <h3 id="titulo-a-fazer">A fazer</h3>
+            <span class="coluna__quantidade" aria-hidden="true">3</span>
+            <span class="somente-leitor">3 tarefas</span>
+          </header>
+
+          <ul class="coluna__tarefas">
+            <li><article class="cartao">
+              <div class="cartao__topo">
+                <h4 title="Implementar layout responsivo com Flexbox e Grid">Implementar layout responsivo com Flexbox e Grid</h4>
+                <span class="prioridade prioridade--alta">Alta</span>
+              </div>
+              <p class="cartao__projeto"><span>Projeto</span> Interface Acadêmica</p>
+              <p class="cartao__responsavel"><span>Responsável</span> Andrey Bueno</p>
+              <footer class="cartao__rodape">
+                <time datetime="2026-08-26">26 ago</time>
+                <span>Entrega</span>
+              </footer>
+            </article></li>
+
+            <li><article class="cartao">
+              <div class="cartao__topo">
+                <h4 title="Revisar funções e listas em Python">Revisar funções e listas em Python</h4>
+                <span class="prioridade prioridade--media">Média</span>
+              </div>
+              <p class="cartao__projeto"><span>Projeto</span> Fundamentos Python</p>
+              <p class="cartao__responsavel"><span>Responsável</span> Andrey Bueno</p>
+              <footer class="cartao__rodape">
+                <time datetime="2026-08-29">29 ago</time>
+                <span>Estudo</span>
+              </footer>
+            </article></li>
+
+            <li><article class="cartao">
+              <div class="cartao__topo">
+                <h4 title="Ler capítulo sobre normalização de bancos de dados relacionais">Ler capítulo sobre normalização de bancos de dados relacionais</h4>
+                <span class="prioridade prioridade--baixa">Baixa</span>
+              </div>
+              <p class="cartao__projeto"><span>Projeto</span> Acervo Digital</p>
+              <p class="cartao__responsavel"><span>Responsável</span> Andrey Bueno</p>
+              <footer class="cartao__rodape">
+                <time datetime="2026-09-01">01 set</time>
+                <span>Leitura</span>
+              </footer>
+            </article></li>
+          </ul>
+        </section>
+
+        <section class="coluna coluna--andamento" id="em-andamento" aria-labelledby="titulo-andamento">
+          <header class="coluna__cabecalho">
+            <span class="coluna__indicador" aria-hidden="true"></span>
+            <h3 id="titulo-andamento">Em andamento</h3>
+            <span class="coluna__quantidade" aria-hidden="true">2</span>
+            <span class="somente-leitor">2 tarefas</span>
+          </header>
+
+          <ul class="coluna__tarefas">
+            <li><article class="cartao">
+              <div class="cartao__topo">
+                <h4 title="Preparar apresentação do projeto integrador">Preparar apresentação do projeto integrador</h4>
+                <span class="prioridade prioridade--alta">Alta</span>
+              </div>
+              <p class="cartao__projeto"><span>Projeto</span> Campus Conectado</p>
+              <p class="cartao__responsavel"><span>Responsável</span> Andrey Bueno</p>
+              <footer class="cartao__rodape">
+                <time datetime="2026-08-28">28 ago</time>
+                <span>Apresentação</span>
+              </footer>
+            </article></li>
+
+            <li><article class="cartao">
+              <div class="cartao__topo">
+                <h4 title="Modelar diagrama de classes do sistema">Modelar diagrama de classes do sistema</h4>
+                <span class="prioridade prioridade--media">Média</span>
+              </div>
+              <p class="cartao__projeto"><span>Projeto</span> Sistema de Biblioteca</p>
+              <p class="cartao__responsavel"><span>Responsável</span> Andrey Bueno</p>
+              <footer class="cartao__rodape">
+                <time datetime="2026-09-02">02 set</time>
+                <span>Atividade</span>
+              </footer>
+            </article></li>
+          </ul>
+        </section>
+
+        <section class="coluna coluna--revisao" id="em-revisao" aria-labelledby="titulo-revisao">
+          <header class="coluna__cabecalho">
+            <span class="coluna__indicador" aria-hidden="true"></span>
+            <h3 id="titulo-revisao">Em revisão</h3>
+            <span class="coluna__quantidade" aria-hidden="true">1</span>
+            <span class="somente-leitor">1 tarefa</span>
+          </header>
+
+          <ul class="coluna__tarefas">
+            <li><article class="cartao">
+              <div class="cartao__topo">
+                <h4 title="Corrigir relatório da aula de laboratório">Corrigir relatório da aula de laboratório</h4>
+                <span class="prioridade prioridade--media">Média</span>
+              </div>
+              <p class="cartao__projeto"><span>Projeto</span> Laboratório de Redes</p>
+              <p class="cartao__responsavel"><span>Responsável</span> Andrey Bueno</p>
+              <footer class="cartao__rodape">
+                <time datetime="2026-08-27">27 ago</time>
+                <span>Relatório</span>
+              </footer>
+            </article></li>
+          </ul>
+        </section>
+
+        <section class="coluna coluna--concluida" id="concluidas" aria-labelledby="titulo-concluidas">
+          <header class="coluna__cabecalho">
+            <span class="coluna__indicador" aria-hidden="true"></span>
+            <h3 id="titulo-concluidas">Concluídas</h3>
+            <span class="coluna__quantidade" aria-hidden="true">2</span>
+            <span class="somente-leitor">2 tarefas</span>
+          </header>
+
+          <ul class="coluna__tarefas">
+            <li><article class="cartao">
+              <div class="cartao__topo">
+                <h4 title="Criar estrutura semântica da página">Criar estrutura semântica da página</h4>
+                <span class="prioridade prioridade--alta">Alta</span>
+              </div>
+              <p class="cartao__projeto"><span>Projeto</span> Interface Acadêmica</p>
+              <p class="cartao__responsavel"><span>Responsável</span> Andrey Bueno</p>
+              <footer class="cartao__rodape">
+                <time datetime="2026-08-19">19 ago</time>
+                <span>Entregue</span>
+              </footer>
+            </article></li>
+
+            <li><article class="cartao">
+              <div class="cartao__topo">
+                <h4 title="Resolver lista de lógica proposicional">Resolver lista de lógica proposicional</h4>
+                <span class="prioridade prioridade--baixa">Baixa</span>
+              </div>
+              <p class="cartao__projeto"><span>Projeto</span> Caderno de Exercícios</p>
+              <p class="cartao__responsavel"><span>Responsável</span> Andrey Bueno</p>
+              <footer class="cartao__rodape">
+                <time datetime="2026-08-21">21 ago</time>
+                <span>Entregue</span>
+              </footer>
+            </article></li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <footer class="rodape-pagina">
+      <p>Andrey Bueno <span aria-hidden="true">·</span> Desenvolvimento Frontend 2026.2</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,579 @@
+:root {
+  --cor-fundo: #f3f0e9;
+  --cor-superficie: #fffdf8;
+  --cor-superficie-elevada: #ffffff;
+  --cor-texto: #18201c;
+  --cor-texto-suave: #59635d;
+  --cor-borda: #d7d6ce;
+  --cor-a-fazer: #b64231;
+  --cor-andamento: #9a6500;
+  --cor-revisao: #315fa8;
+  --cor-concluida: #287353;
+  --cor-foco: #155dd1;
+  --espaco-1: 0.5rem;
+  --espaco-2: 1rem;
+  --espaco-3: 1.5rem;
+  --espaco-4: 2.5rem;
+  --raio: 0.875rem;
+  --sombra: 0 0.75rem 2.25rem rgb(34 43 38 / 8%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.somente-leitor {
+  position: absolute;
+  width: 0.0625rem;
+  height: 0.0625rem;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 0;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--cor-texto);
+  background:
+    linear-gradient(rgb(24 32 28 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(24 32 28 / 3%) 1px, transparent 1px),
+    var(--cor-fundo);
+  background-size: 2rem 2rem;
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+}
+
+a:focus-visible,
+input:focus-visible {
+  outline: 0.1875rem solid var(--cor-foco);
+  outline-offset: 0.1875rem;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 20;
+  top: var(--espaco-2);
+  left: var(--espaco-2);
+  min-height: 2.75rem;
+  padding: 0.625rem var(--espaco-2);
+  border-radius: 0.5rem;
+  color: var(--cor-superficie);
+  background: var(--cor-texto);
+  transform: translateY(-200%);
+  transition: transform 180ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.cabecalho,
+.conteudo,
+.rodape-pagina {
+  width: min(100% - 2rem, 112rem);
+  margin-inline: auto;
+}
+
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+  padding-block: clamp(1.5rem, 5vw, 4rem) var(--espaco-3);
+  animation: revelar 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.cabecalho__marca {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.cabecalho__simbolo {
+  display: grid;
+  flex: 0 0 3.25rem;
+  width: 3.25rem;
+  min-height: 3.25rem;
+  place-items: center;
+  border: 0.125rem solid var(--cor-texto);
+  border-radius: 50%;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.cabecalho h1,
+.cabecalho p,
+.introducao h2,
+.introducao p,
+.coluna h3,
+.cartao h4,
+.cartao p,
+.rodape-pagina p {
+  margin: 0;
+}
+
+.cabecalho h1 {
+  font-size: clamp(1.75rem, 5vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.cabecalho__legenda,
+.introducao__marcador {
+  color: var(--cor-texto-suave);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cabecalho__resumo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-1);
+  padding-block: var(--espaco-1);
+  border-block: 0.0625rem solid var(--cor-borda);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.875rem;
+}
+
+.cabecalho__resumo span {
+  color: var(--cor-texto-suave);
+}
+
+.controles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  margin-bottom: var(--espaco-4);
+  padding: var(--espaco-2);
+  border: 0.0625rem solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra);
+}
+
+.controles__titulo h2 {
+  margin: 0;
+  font-size: 1.375rem;
+}
+
+.filtros {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+.campo-busca,
+.filtros fieldset {
+  min-width: 0;
+}
+
+.campo-busca {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.campo-busca label,
+.filtros legend {
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.campo-busca input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.75rem;
+  border: 0.0625rem solid var(--cor-borda);
+  border-radius: 0.625rem;
+  color: var(--cor-texto);
+  background: var(--cor-superficie-elevada);
+  font: inherit;
+}
+
+.filtros fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.filtros legend {
+  margin-bottom: 0.375rem;
+}
+
+.opcoes {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: var(--espaco-1);
+}
+
+.opcoes input {
+  position: absolute;
+  width: 0.0625rem;
+  height: 0.0625rem;
+  opacity: 0;
+}
+
+.opcoes label {
+  flex: 0 0 auto;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 0.0625rem solid var(--cor-borda);
+  border-radius: 999rem;
+  background: var(--cor-superficie-elevada);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.opcoes label:hover {
+  transform: translateY(-0.125rem);
+}
+
+.opcoes input:checked + label {
+  color: var(--cor-superficie);
+  background: var(--cor-texto);
+}
+
+.opcoes input:focus-visible + label {
+  outline: 0.1875rem solid var(--cor-foco);
+  outline-offset: 0.1875rem;
+}
+
+.conteudo {
+  min-width: 0;
+}
+
+.introducao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  padding-bottom: var(--espaco-3);
+}
+
+.introducao h2 {
+  max-width: 16ch;
+  font-size: clamp(1.625rem, 4vw, 2.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.introducao > p {
+  max-width: 34rem;
+  color: var(--cor-texto-suave);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.9375rem;
+}
+
+.quadro {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espaco-2);
+}
+
+.coluna {
+  --cor-status: var(--cor-a-fazer);
+  display: flex;
+  min-width: 0;
+  min-height: 14rem;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  padding: var(--espaco-2);
+  border: 0.0625rem solid var(--cor-borda);
+  border-top: 0.25rem solid var(--cor-status);
+  border-radius: var(--raio);
+  background: rgb(255 253 248 / 72%);
+  animation: surgir-coluna 650ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.coluna:nth-child(2) {
+  animation-delay: 90ms;
+}
+
+.coluna:nth-child(3) {
+  animation-delay: 180ms;
+}
+
+.coluna:nth-child(4) {
+  animation-delay: 270ms;
+}
+
+.coluna--andamento {
+  --cor-status: var(--cor-andamento);
+}
+
+.coluna--revisao {
+  --cor-status: var(--cor-revisao);
+}
+
+.coluna--concluida {
+  --cor-status: var(--cor-concluida);
+}
+
+.coluna__cabecalho {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.coluna__indicador {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex: 0 0 0.75rem;
+  border-radius: 50%;
+  background: var(--cor-status);
+  box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--cor-status) 15%, transparent);
+}
+
+.coluna h3 {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  font-size: 1.0625rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coluna__quantidade {
+  display: grid;
+  width: 1.75rem;
+  min-height: 1.75rem;
+  place-items: center;
+  border: 0.0625rem solid var(--cor-borda);
+  border-radius: 50%;
+  background: var(--cor-superficie);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.coluna__tarefas {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.coluna__tarefas > li {
+  min-width: 0;
+}
+
+.cartao {
+  display: flex;
+  min-width: 0;
+  min-height: 10rem;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  padding: var(--espaco-2);
+  border: 0.0625rem solid var(--cor-borda);
+  border-radius: calc(var(--raio) - 0.25rem);
+  background: var(--cor-superficie-elevada);
+  box-shadow: var(--sombra);
+  transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+.cartao:hover {
+  border-color: var(--cor-status);
+  box-shadow: 0 1rem 2rem rgb(34 43 38 / 13%);
+  transform: translateY(-0.25rem) rotate(-0.25deg);
+}
+
+.cartao__topo {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.cartao h4 {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  font-size: 1rem;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prioridade {
+  flex: 0 0 auto;
+  padding: 0.1875rem 0.5rem;
+  border: 0.0625rem solid currentColor;
+  border-radius: 999rem;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.prioridade--alta {
+  color: #9d2f22;
+  background: #fff0ed;
+}
+
+.prioridade--media {
+  color: #755000;
+  background: #fff6d9;
+}
+
+.prioridade--baixa {
+  color: #256147;
+  background: #eaf8f1;
+}
+
+.cartao__projeto,
+.cartao__responsavel {
+  color: var(--cor-texto-suave);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.8125rem;
+}
+
+.cartao__projeto span,
+.cartao__responsavel span {
+  margin-right: 0.25rem;
+  color: var(--cor-texto);
+  font-weight: 700;
+}
+
+.cartao__rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-1);
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 0.0625rem solid var(--cor-borda);
+  color: var(--cor-texto-suave);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.75rem;
+}
+
+.cartao__rodape time {
+  color: var(--cor-texto);
+  font-weight: 700;
+}
+
+.rodape-pagina {
+  padding-block: var(--espaco-4);
+  color: var(--cor-texto-suave);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+@keyframes revelar {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+}
+
+@keyframes surgir-coluna {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) scale(0.98);
+  }
+}
+
+/*
+  Breakpoint: com cerca de 42rem, duas colunas passam a ter espaço suficiente
+  para os títulos e etiquetas de prioridade sem comprimir o conteúdo.
+*/
+@media (min-width: 42rem) {
+  .cabecalho {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .cabecalho__resumo {
+    min-width: 15rem;
+    flex-direction: column;
+    align-items: flex-end;
+    border-block: 0;
+  }
+
+  .introducao {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .introducao > p {
+    text-align: right;
+  }
+
+  .controles {
+    padding: var(--espaco-3);
+  }
+
+  .campo-busca {
+    max-width: 28rem;
+  }
+
+  .quadro {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/*
+  Breakpoint: em 75rem, as quatro colunas cabem lado a lado com cartões legíveis;
+  antes disso, quatro colunas fariam os títulos e prazos colidirem.
+*/
+@media (min-width: 75rem) {
+  .filtros {
+    display: grid;
+    grid-template-columns: minmax(15rem, 1fr) auto auto;
+    align-items: end;
+  }
+
+  .quadro {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .coluna {
+    min-height: 32rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
