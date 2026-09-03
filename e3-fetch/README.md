@@ -41,7 +41,7 @@ Os três tipos de erro produzem textos distintos, decididos por `erro.name` em `
 
 | Tipo | Como acontece | `erro.name` |
 |---|---|---|
-| rede | offline, DNS, servidor fora. O `fetch` **rejeita**. | `TypeError` |
+| rede | offline, DNS, servidor fora. O `fetch` **rejeita** com `TypeError`; `api.js` dá ao erro um nome próprio. | `NetworkError` |
 | protocolo | servidor respondeu 404/500. O `fetch` **resolve**; nós lançamos ao ver `!response.ok`. | `HttpError` |
 | formato | corpo não é JSON válido, ou não tem a chave `tarefas`. | `SyntaxError` |
 
@@ -51,7 +51,9 @@ Os três tipos de erro produzem textos distintos, decididos por `erro.name` em `
 - **Duas esperas.** A primeira (`await fetch`) resolve quando os cabeçalhos chegam. A segunda (`await resposta.json()`) baixa e interpreta o corpo. São dois momentos diferentes da rede.
 - **Carregando antes do `await`.** Se viesse depois, a tela ficaria em branco durante toda a espera.
 - **Vazio fora do `catch`.** Lista vazia é uma resposta válida, não uma falha. Ela é detectada no caminho de sucesso, por `length === 0`.
-- **Região de status pré-existente.** O `<p role="status" aria-live="polite">` está no HTML desde o início, vazio. Assim o leitor de tela já a observa quando o texto muda. Se fosse criada só na hora, nada seria anunciado.
+- **Região de status pré-existente.** O `<p role="status" aria-live="polite">` está no HTML desde o início, vazio. Assim o leitor de tela já a observa quando o texto muda. Se fosse criada só na hora, nada seria anunciado. Por isso o CSS não usa `display: none` na região vazia (isso a tiraria da árvore de acessibilidade); só remove a caixa.
+- **Erro de rede com nome próprio.** O `fetch` rejeita com um `TypeError` genérico. `api.js` o captura e relança como `NetworkError`; assim um `TypeError` causado por bug no código não é apresentado como "sua internet caiu": cai no texto genérico.
+- **Estado de erro zera o quadro.** Antes da mensagem, `renderizarTarefas([])` deixa contadores e colunas coerentes com o que a tela diz.
 - **`textContent`, nunca `innerHTML`.** Todo texto, inclusive o que vem do JSON, entra como texto. Nada é interpretado como HTML.
 - **`renderizacao.js` não mudou.** Ele recebe um array e desenha; não sabe de onde o array veio. Trocar a origem não exigiu tocar nele: esse é o acoplamento resolvido.
 - **Sem `await` de nível superior.** A inicialização acontece dentro de `iniciar()`.

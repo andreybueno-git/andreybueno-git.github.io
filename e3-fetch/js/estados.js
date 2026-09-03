@@ -14,17 +14,19 @@ import { renderizarTarefas } from './renderizacao.js';
 const regiaoDeStatus = document.getElementById('status');
 
 // Cada tipo de falha vira um texto diferente. Distinguimos por erro.name:
-//   TypeError   -> a rede falhou (offline, DNS, servidor fora): o fetch REJEITOU
-//   HttpError   -> a rede funcionou mas o servidor disse não (404, 500):
-//                  o fetch RESOLVEU e nós lançamos por causa do response.ok
-//   SyntaxError -> chegou resposta, mas o corpo não é JSON válido ou não
-//                  tem a forma esperada: falhou em resposta.json() ou na checagem
+//   NetworkError -> a rede falhou (offline, DNS, servidor fora): o fetch
+//                   REJEITOU com TypeError e api.js deu esse nome ao erro
+//   HttpError    -> a rede funcionou mas o servidor disse não (404, 500):
+//                   o fetch RESOLVEU e nós lançamos por causa do response.ok
+//   SyntaxError  -> chegou resposta, mas o corpo não é JSON válido ou não
+//                   tem a forma esperada: falhou em resposta.json() ou na checagem
+//   qualquer outro (inclusive bug no código) -> texto genérico, sem culpar a rede
 function mensagemDoErro(erro) {
   switch (erro && erro.name) {
-    case 'TypeError':
+    case 'NetworkError':
       return 'Não foi possível conectar. Verifique sua internet e tente recarregar a página.';
     case 'HttpError':
-      return `O servidor não conseguiu entregar as tarefas (${erro.message}) Tente novamente mais tarde.`;
+      return `O servidor não conseguiu entregar as tarefas (status ${erro.status}). Tente novamente mais tarde.`;
     case 'SyntaxError':
       return 'Os dados chegaram, mas estão em um formato inválido. O arquivo de tarefas precisa ser corrigido.';
     default:
@@ -58,6 +60,9 @@ export function renderizarEstado(estado, dados) {
       break;
 
     case 'erro':
+      // Zera o quadro: os contadores não podem contar uma história
+      // diferente da mensagem ("1 tarefa" numa coluna vazia).
+      renderizarTarefas([]);
       mostrar(mensagemDoErro(dados), 'erro');
       break;
 

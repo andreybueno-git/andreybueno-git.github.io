@@ -28,7 +28,7 @@ async function iniciar() {
 
     renderizarEstado('sucesso', tarefas);
   } catch (erro) {
-    // Tudo que falhou de verdade cai aqui: rede (TypeError), protocolo
+    // Tudo que falhou de verdade cai aqui: rede (NetworkError), protocolo
     // (HttpError, lançado por nós quando response.ok é falso) e formato
     // (SyntaxError). Quem escolhe o texto por tipo é estados.js.
     console.error(erro);

@@ -8,7 +8,19 @@ export async function carregarTarefas() {
   // Caminho RELATIVO: o arquivo está na mesma origem da página.
   // Esta é a primeira espera: a promessa do fetch resolve quando os
   // CABEÇALHOS chegam, não quando o corpo inteiro foi baixado.
-  const resposta = await fetch('dados.json');
+  //
+  // O único caso em que o fetch REJEITA é falha de rede (offline, DNS,
+  // servidor fora), e ele faz isso com um TypeError genérico. Damos ao
+  // erro um nome próprio para a tela saber que foi a REDE, sem confundir
+  // com qualquer outro TypeError vindo de um bug no código.
+  let resposta;
+  try {
+    resposta = await fetch('dados.json');
+  } catch (falhaDeRede) {
+    const erro = new Error('Não houve resposta do servidor.', { cause: falhaDeRede });
+    erro.name = 'NetworkError';
+    throw erro;
+  }
 
   // fetch NÃO rejeita em 404 ou 500. Para ele, a rede funcionou: houve
   // resposta. Quem diz se o conteúdo é bom é o response.ok (status 200-299).

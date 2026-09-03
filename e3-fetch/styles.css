@@ -579,8 +579,10 @@ input:focus-visible {
 }
 
 /* E3 — região de status (os quatro estados da tela) */
-/* Existe no HTML desde o início, vazia. Vazia, não ocupa espaço;
-   continua no DOM, então o leitor de tela já a observa. */
+/* Existe no HTML desde o início, vazia. Enquanto vazia, perde só a
+   "caixa" (margem, borda, preenchimento). NUNCA display:none: isso
+   tiraria a região da árvore de acessibilidade e o leitor de tela
+   deixaria de observá-la. */
 .status {
   margin: 0 0 var(--espaco-2);
   padding: var(--espaco-2);
@@ -590,7 +592,7 @@ input:focus-visible {
   color: var(--cor-texto);
   font-size: 0.95rem;
 }
-.status:empty { display: none; }
+.status:empty { margin: 0; padding: 0; border: 0; }
 
 .status--carregando { border-color: var(--cor-andamento); color: var(--cor-andamento); }
 .status--sucesso    { border-color: var(--cor-concluida); color: var(--cor-concluida); }
