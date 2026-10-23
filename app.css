@@ -1,0 +1,163 @@
+/* Interface em volta da cena 3D: HUD, passeio, cartões, ampliação e fallback em texto.
+   Grafite moderno: o computador é o centro; o HUD é uma linha fina em cima e some no que importa. */
+:root{
+  --bg:#0b0c0e;--panel:#16181bf0;--panel-solid:#16181b;--line:#2c3036;--ink:#ebe6dd;--muted:#8e9299;
+  --guara:#e8743b;--guara-hi:#f08a52;--amber:#f2b25c;--accent:var(--amber);
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.22,.8,.2,1);color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--amber)}
+:focus-visible{outline:2px solid var(--guara);outline-offset:3px}
+.skip{position:fixed;left:16px;top:-80px;z-index:90;background:var(--panel-solid);border:1px solid var(--line);color:var(--ink);padding:10px 14px;border-radius:8px;font-family:var(--mono);font-size:13px}
+.skip:focus{top:16px}
+
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;outline:none;touch-action:none}
+#pc-host{position:fixed;left:0;top:0;width:0;height:0;z-index:5;overflow:visible}
+/* Perto do computador o quarto escurece nas bordas: o monitor vira palco */
+.stage{position:fixed;inset:0;z-index:6;pointer-events:none;background:radial-gradient(ellipse 62% 58% at 50% 50%,#0b0c0e00 55%,#0b0c0eb8 100%);opacity:0;transition:opacity .9s var(--ease)}
+body[data-stop=pc] .stage{opacity:1}
+/* na tela a vinheta passa por cima do desktop também: monitor e imagem escurecem juntos nas bordas */
+body[data-stop=screen] .stage{opacity:.55}
+/* Lente: perto do monitor o fundo e o teclado saem de foco, como numa foto de perto */
+.lens{position:fixed;inset:0;z-index:2;pointer-events:none;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);-webkit-mask-image:radial-gradient(ellipse 54% 52% at 50% 47%,#0000 64%,#000 100%);mask-image:radial-gradient(ellipse 54% 52% at 50% 47%,#0000 64%,#000 100%);opacity:0;transition:opacity .9s var(--ease)}
+/* só na vista do monitor inteiro: perto da tela, a moldura em foco é o que prende a imagem ao CRT */
+body[data-stop=pc] .lens{opacity:1}
+/* Grão de filme bem leve por cima do 3D (fica abaixo do desktop) */
+.grain{position:fixed;inset:0;z-index:7;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.4 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>")}
+
+/* Carregamento: curto e com saída imediata */
+#loader{position:fixed;inset:0;z-index:80;display:grid;place-content:center;justify-items:center;gap:10px;background:var(--bg);transition:opacity .6s var(--ease)}
+#loader[hidden]{display:none}
+.loader-kicker{margin:0;font-family:var(--mono);font-size:12px;letter-spacing:.24em;color:var(--guara)}
+.loader-title{margin:0;font-size:24px;font-weight:500}
+.loader-skip{margin-top:14px;background:none;border:1px solid var(--line);border-radius:8px;padding:10px 16px;color:var(--muted);font-family:var(--mono);font-size:13px}
+.loader-skip:hover{color:var(--ink);border-color:var(--muted)}
+
+/* Linha do topo: nome à esquerda, passeio à direita */
+.hud-top{position:fixed;left:0;right:0;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:9px max(14px,env(safe-area-inset-right,0px)) 9px max(14px,env(safe-area-inset-left,0px));pointer-events:none}
+.brand{margin:0;display:flex;align-items:baseline;gap:10px;padding:7px 12px;border-radius:10px;background:#101215c7;border:1px solid #ffffff12;backdrop-filter:blur(10px);font-weight:600;font-size:15px;letter-spacing:-.005em;white-space:nowrap}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--guara);box-shadow:0 0 10px var(--guara);align-self:center}
+.brand-sub{font-family:var(--mono);font-weight:400;font-size:12px;color:#a9adb4;letter-spacing:.02em}
+.hud-hint{position:fixed;left:max(22px,env(safe-area-inset-left,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:20;margin:0;padding:7px 11px;border-radius:8px;background:#101215c7;border:1px solid #ffffff12;backdrop-filter:blur(10px);font-family:var(--mono);font-size:12px;line-height:1.45;color:#b9b4ab;max-width:min(56ch,calc(100vw - 44px));pointer-events:none}
+
+.power-cta{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:8px}
+.power-cta[hidden]{display:none}
+/* na estante, no mural e na janela o botão taparia os objetos clicáveis */
+body[data-stop="shelf"] .power-cta,body[data-stop="board"] .power-cta,body[data-stop="window"] .power-cta{display:none}
+.power-cta p{display:none} /* a dica do canto já diz para apertar o botão laranja */
+.btn-primary{white-space:nowrap;background:var(--guara);color:#1a0d05;border:0;border-radius:10px;padding:13px 22px;font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:.02em;box-shadow:0 10px 30px #e8743b33}
+.btn-primary:hover{background:var(--guara-hi)}
+
+.tour{position:fixed;right:max(14px,env(safe-area-inset-right,0px));top:9px;z-index:21;display:flex;align-items:center;gap:2px;padding:3px;border-radius:10px;background:#101215c7;border:1px solid #ffffff12;backdrop-filter:blur(10px);max-width:calc(100vw - 32px);overflow-x:auto;scrollbar-width:none}
+.tour::-webkit-scrollbar{display:none}
+.tour button{border:0;background:none;padding:8px 11px;border-radius:8px;font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;color:#a9adb4;white-space:nowrap;min-height:38px}
+.tour button:hover{color:var(--ink);background:#ffffff0d}
+.tour [data-stop][aria-pressed=true]{color:var(--ink)}
+.tour [data-stop][aria-pressed=true]::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--guara);margin-right:7px;vertical-align:1px}
+.tour button:disabled{opacity:.35;cursor:default}
+.tour-sep{width:1px;height:18px;background:var(--line);margin:0 6px;flex:none}
+[data-expand]:not(:disabled){color:var(--amber)}
+/* som: laranja quando toca, riscado quando está mudo */
+.tour [data-sound][aria-pressed=true]{color:var(--guara)}
+.tour [data-sound][aria-pressed=false]{text-decoration:line-through;text-decoration-thickness:1px}
+.tour [data-sound][hidden]{display:none}
+.tour [data-newnote]{color:#f7e36a}
+.no-webgl .tour [data-newnote]{display:none}
+
+.card{position:fixed;right:max(22px,env(safe-area-inset-right,0px));top:72px;z-index:25;width:min(360px,calc(100vw - 32px));background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:20px 20px 16px;box-shadow:0 24px 60px #00000080;backdrop-filter:blur(12px)}
+.card[hidden]{display:none}
+.card-close{position:absolute;right:8px;top:8px;width:36px;height:36px;border:0;background:none;font-size:20px;color:var(--muted);border-radius:8px}
+.card-close:hover{background:#ffffff10;color:var(--ink)}
+.card-kicker{margin:0 0 8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--guara)}
+.card-title{margin:0 0 8px;font-size:22px;font-weight:600;line-height:1.15;padding-right:30px;text-wrap:balance}
+.card-body{margin:0 0 14px;font-size:14.5px;line-height:1.6;color:#b9b4ab}
+.card-links{margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.card-links a{display:inline-flex;align-items:center;min-height:38px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:#ffffff08;color:var(--ink);text-decoration:none;font-family:var(--mono);font-size:12.5px}
+.card-links a:hover{border-color:var(--guara);color:var(--guara-hi)}
+
+#pc-dialog{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--bg);color:var(--ink)}
+#pc-dialog::backdrop{background:var(--bg)}
+.pc-dialog-bar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--muted)}
+.pc-dialog-bar button{font-family:var(--mono);font-size:12.5px;background:#ffffff0a;border:1px solid var(--line);border-radius:8px;padding:9px 14px;min-height:40px}
+.pc-dialog-bar button:hover{border-color:var(--guara);color:var(--guara-hi)}
+.pc-dialog-stage{position:relative;height:calc(100dvh - 56px);overflow:hidden}
+.pc-dialog-stage>*{position:absolute;left:0;top:0;transform-origin:0 0}
+#pc-dialog .rot-hint{display:none}
+#pc-dialog[data-rotated] .rot-hint{display:inline}
+#pc-dialog[data-rotated] .bar-title{display:none}
+/* colado na tela 3D, o desktop acompanha os cantos arredondados do vidro do CRT */
+/* a abertura da moldura é mais redonda em cima: cantos de cima maiores para a imagem não passar dela */
+#pc-host>.aos.is-projected{border-radius:58px 58px 30px 30px/44px 44px 26px 26px}
+/* Vidro por cima da imagem colada: reflexo diagonal e a borda escurecendo onde o vidro curva,
+   como o reflexo que a cena 3D desenha no vidro (que fica por baixo do desktop). */
+#pc-host>.aos.is-projected::after{content:'';position:absolute;inset:0;z-index:390;pointer-events:none;border-radius:inherit;background:linear-gradient(116deg,rgba(255,255,255,.075) 0%,rgba(255,255,255,.025) 24%,transparent 42%),radial-gradient(125% 95% at 50% 46%,transparent 60%,rgba(0,0,0,.38) 100%);box-shadow:inset 0 0 0 2px rgba(0,0,0,.55),inset 0 0 24px 6px rgba(0,0,0,.35)}
+/* o arco dos cantos de baixo cortaria o Iniciar e o relógio */
+#pc-host>.aos.is-projected .aos-taskbar{padding-left:16px;padding-right:16px}
+/* no tema sistema a barra é a de menus, em cima: afasta mais das pontas por causa dos cantos de cima, mais redondos */
+#pc-host>.aos.is-projected[data-theme=sistema] .aos-taskbar{padding-left:40px;padding-right:40px}
+.pc-dialog-bar button{white-space:nowrap}
+@media (max-width:420px){.pc-dialog-bar .btn-long{display:none}.pc-dialog-bar{font-size:12px;padding:0 12px}}
+/* celular deitado: a barra vira coluna na esquerda para o desktop usar a altura toda */
+@media (orientation:landscape) and (max-height:500px){#pc-dialog[open]{display:flex}.pc-dialog-bar{flex-direction:column;justify-content:center;width:64px;height:100dvh;padding:0 8px;border-bottom:0;border-right:1px solid var(--line)}.pc-dialog-bar .bar-title,.pc-dialog-bar .rot-hint{display:none}.pc-dialog-bar button{padding:9px 10px;font-size:0}.pc-dialog-bar button::after{content:'↙';font-size:18px}.pc-dialog-stage{flex:1;height:100dvh}}
+/* celular na estante: o cartão vai para longe da prateleira do objeto escolhido */
+@media (max-width:760px){body[data-stop=shelf] .card[data-low=true]{top:calc(var(--hud-h,72px));bottom:auto}}
+
+/* Conteúdo em texto: para quem não vê o 3D, leitores de tela e buscadores */
+.text-fallback{position:fixed;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+/* sem 3D o menu só tem "Ampliar computador": as paradas não levam a lugar nenhum */
+.no-webgl .tour [data-stop],.no-webgl .tour-sep,.no-webgl .power-cta p{display:none}
+/* com o 3D no ar ele fica fora da tela, mas aparece quando o teclado entra nele (link de pular ou Tab) */
+.no-webgl .text-fallback,.text-fallback:focus-within{position:fixed;left:50%;top:var(--hud-h,72px);transform:translateX(-50%);width:min(560px,calc(100vw - 32px));height:auto;max-height:calc(100dvh - var(--hud-h,72px) - 130px);overflow:auto;z-index:30;background:var(--panel-solid);border:1px solid var(--line);border-radius:12px;padding:24px}
+.text-fallback h1{margin:0 0 10px;font-size:26px;font-weight:600}
+.text-fallback p,.text-fallback li{font-size:16px;line-height:1.6;color:var(--muted)}
+
+body.is-loading .hud-top,body.is-loading .tour,body.is-loading .power-cta,body.is-loading .hud-hint{opacity:0}
+body[data-state=on] .hud-hint{color:#b9b4ab}
+
+@media (max-width:1100px){.brand-sub{display:none}}
+/* tablet em pé e celular: nome em cima, passeio numa fileira rolável logo abaixo */
+@media (max-width:820px){
+  .hud-top{padding:8px 10px}
+  .tour{left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px));top:54px;max-width:none}
+  .power-cta{bottom:calc(var(--hint-h,40px) + 22px + env(safe-area-inset-bottom,0px))}
+}
+/* celular deitado: tudo numa linha só e a dica numa linha */
+@media (max-height:500px) and (min-width:821px){
+  .hud-top{padding:6px 10px}
+  .tour{top:5px}
+  .tour button{padding:6px 9px;min-height:34px}
+}
+@media (max-height:500px){
+  .hud-hint{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(60vw,56ch)}
+  .power-cta{left:auto;right:max(14px,env(safe-area-inset-right,0px));transform:none;bottom:calc(var(--hint-h,36px) + 16px + env(safe-area-inset-bottom,0px))}
+}
+@media (max-width:760px){
+  .hud-top{padding:8px 10px}
+  .tour{left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px));top:54px;max-width:none}
+  .tour button{padding:8px 9px;font-size:12px;min-height:38px}
+  .hud-hint{left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));font-size:11.5px;max-width:none}
+  .card{left:16px;right:16px;top:auto;bottom:calc(var(--hint-h,40px) + 20px + env(safe-area-inset-bottom,0px));width:auto;padding:16px 16px 14px}
+  .card-body{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px} /* no celular o cartão é curto: tapa menos a estante */
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Na tela do computador o ponteiro vira o cursor antigo do AndreyOS: seta, mãozinha no que é clicável e
+   I para digitar (pixel art 2×, até 32 px, em assets/cursores/, desenhada por dev/cursores.py). Fora da tela, o cursor normal. */
+.aos,.aos *{cursor:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAgCAYAAAAWl4iLAAAAlklEQVR4nM3WsQ7AEBAGYJrO0uEm7/9snQyNF2hT8S8apXW4S4SEyIcTlDHbeRfFHAv3hI+JDbO8m3hFw7k91EQ2qL0/tGwxt3ycmEs+Xtwqnyf+K58v/iqXI66VyxOX5HLERPa1H6/QeDFFGfYwDTk3j6IUIpw25HJuHiXS1ugm1sg7X5BiXJoluZX2E6vKyP3rhmfFBb3HYuQR/wrIAAAAAElFTkSuQmCC") 1 1,default!important}
+.aos :is(button,a,[role=button],[role=menuitem],.aos-icon,.aos-capi-btn,[data-open],[data-act],[data-play],[data-theme-pick],[data-file],[data-run-term],[data-link],[data-task]){cursor:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAAAu0lEQVR4nO2XPQ7DIAyFn63MqIOn3v9smTxUXKBdiNIkQm6DExO1bwOBzPds/giGUro939s5PwgOYgSJLFLVcdEvcnch55bJ/8DfiPFrgYe9E1v3N+NqxLrd3wsHLCcYVyPe60QuDsQRp4Nun5oTUhyIz7GuVvRpDq3+mhi9VLXO5C4Bak4wgkTWi8NbUpyMJz6LXKKJh7MCyep12g9xLiuaTrCjcs0IElkDWqu89vNg9F7V4nR2TwojfgF8B02xVlsjMgAAAABJRU5ErkJggg==") 9 1,pointer!important}
+.aos :is(input,textarea,[contenteditable=true]){cursor:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAgCAYAAAAi7kmXAAAAZUlEQVR4nGPk4xP4z4AFfPr0gRFE45JnYiATsMAYb948Q5EQEZH6j0OcMhsZcfnhDdQmmA3U8+MnaOjBAKFQpthGplGNuMFo4OABo4EzPAKHBVcZgw7Q1dGkJGfAJ079kpxmtRUAor8k8ap4qDUAAAAASUVORK5CYII=") 7 16,text!important}
+
+/* Bloquinho de post-it: abre ao clicar num post-it do quarto */
+.note-editor{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-1.2deg);z-index:40;width:min(320px,calc(100vw - 32px));padding:18px 18px 14px;background:var(--note,#f7e36a);color:#2b2622;border-radius:3px;box-shadow:0 18px 40px #00000080,inset 0 -18px 30px #0000000f}
+.note-editor[hidden]{display:none}
+.note-editor-titulo{margin:0 0 6px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#2b262299}
+.note-editor textarea{display:block;width:100%;min-height:118px;resize:none;border:0;background:transparent;font-family:'Caveat','Bradley Hand',cursive;font-size:30px;line-height:1.12;color:#2b2622;outline:none}
+.note-editor textarea:focus-visible{outline:2px dashed #2b262255;outline-offset:4px}
+.note-editor-dica{margin:6px 0 10px;font-family:var(--mono);font-size:11px;color:#2b2622a8}
+.note-editor-botoes{display:flex;flex-wrap:wrap;gap:6px}
+.note-editor-botoes button[hidden]{display:none}
+.note-editor-botoes button{font-family:var(--mono);font-size:12px;border-radius:8px;padding:8px 10px;border:1px solid #2b262233;background:#ffffff59;color:#2b2622;min-height:36px}
+.note-editor-botoes .btn-primary{background:#2b2622;color:var(--note,#f7e36a);border-color:#2b2622;box-shadow:none}

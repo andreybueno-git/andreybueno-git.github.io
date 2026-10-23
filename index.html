@@ -1,289 +1,112 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Andrey Bueno — Software Engineer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --border: #30363d;
-      --accent: #58a6ff;
-      --accent2: #7ee787;
-      --text: #e6edf3;
-      --muted: #8b949e;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* HERO */
-    .hero {
-      width: 100%;
-      max-width: 760px;
-      padding: 80px 24px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 16px;
-    }
-
-    .avatar {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), #bc8cff);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      box-shadow: 0 0 0 4px var(--border);
-    }
-
-    .hero h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .hero h1 span { color: var(--accent); }
-
-    .hero p {
-      font-size: 1rem;
-      color: var(--muted);
-      max-width: 480px;
-      line-height: 1.6;
-    }
-
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-    }
-
-    .badge {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 4px 14px;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .badge.green { color: var(--accent2); border-color: var(--accent2)33; }
-    .badge.blue  { color: var(--accent);  border-color: var(--accent)33;  }
-
-    /* SECTIONS */
-    main {
-      width: 100%;
-      max-width: 760px;
-      padding: 0 24px 80px;
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-    }
-
-    section h2 {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-
-    /* ABOUT */
-    .about-text {
-      font-size: 0.97rem;
-      line-height: 1.8;
-      color: var(--text);
-    }
-
-    /* SKILLS */
-    .skill-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 12px;
-    }
-
-    .skill-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 12px;
-      text-align: center;
-      font-size: 0.82rem;
-      color: var(--muted);
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .skill-card:hover { border-color: var(--accent); color: var(--accent); }
-
-    .skill-card .icon { font-size: 1.5rem; margin-bottom: 6px; display: block; }
-
-    /* INTERESTS */
-    .interest-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .interest-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .interest-icon {
-      font-size: 1.4rem;
-      min-width: 36px;
-      text-align: center;
-    }
-
-    .interest-info h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
-    .interest-info p  { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
-
-    /* STATS */
-    .stats-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: center;
-    }
-
-    .stat {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      min-width: 80px;
-    }
-
-    .stat .num  { font-size: 1.6rem; font-weight: 700; color: var(--accent); }
-    .stat .label{ font-size: 0.75rem; color: var(--muted); text-align: center; }
-
-    /* FOOTER */
-    footer {
-      padding: 24px;
-      color: var(--muted);
-      font-size: 0.78rem;
-      text-align: center;
-    }
-
-    footer a { color: var(--accent); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0f16">
+<meta name="description" content="Andrey Bueno: um quarto em 3D com um computador antigo que liga. Explore o desktop, jogue Blocos, Noite dos Zumbis e Mini Mundo e conheça os projetos.">
+<title>Andrey Bueno · AndreyOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Jersey+10&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=VT323&display=swap">
+<link rel="icon" href="assets/guara-icone.png" type="image/png" sizes="192x192">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="desktop.css">
 </head>
-<body>
+<body class="is-loading" data-state="off" data-stop="pc">
+<a class="skip" href="#conteudo-texto">Pular para o conteúdo em texto</a>
 
-  <div class="hero">
-    <div class="avatar">👨‍💻</div>
-    <h1>Andrey Bueno <span>— Dev</span></h1>
-    <p>Estudante de Engenharia de Software apaixonado por jogos, inovação e tecnologia. Construindo o futuro, um commit de cada vez.</p>
-    <div class="badge-row">
-      <span class="badge blue">3º Período — Eng. de Software</span>
-      <span class="badge green">Aberto a oportunidades</span>
-      <span class="badge">24 anos</span>
-      <span class="badge">Brasil</span>
-    </div>
+<canvas id="scene" aria-label="Quarto em 3D com um computador antigo sobre a mesa"></canvas>
+<div class="stage" aria-hidden="true"></div>
+<div class="lens" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div id="pc-host" aria-live="off"></div>
+
+<div id="loader" role="status" aria-live="polite">
+  <p class="loader-kicker">ANDREYOS 24</p>
+  <p class="loader-title">Acendendo o quarto…</p>
+  <button type="button" class="loader-skip" data-skip>Entrar agora</button>
+</div>
+<script>
+  // "Entrar agora" funciona antes de os scripts grandes chegarem.
+  document.querySelector('[data-skip]').addEventListener('click', function () { document.body.classList.remove('is-loading'); document.getElementById('loader').hidden = true; });
+</script>
+
+<header class="hud-top">
+  <p class="brand"><span class="brand-dot" aria-hidden="true"></span>Andrey Bueno <span class="brand-sub">engenharia de software · 4º período</span></p>
+  <p class="hud-hint" id="hud-hint">Aperte o botão laranja do monitor para ligar.</p>
+</header>
+
+<div class="power-cta" id="power-cta">
+  <button type="button" class="btn-primary" data-power>Ligar o computador</button>
+  <p>ou aperte o botão laranja do monitor</p>
+</div>
+
+<nav class="tour" aria-label="Passear pelo quarto">
+  <button type="button" data-stop="screen" aria-pressed="true">Computador</button>
+  <button type="button" data-stop="desk" aria-pressed="false">Mesa</button>
+  <button type="button" data-stop="shelf" aria-pressed="false">Estante</button>
+  <button type="button" data-stop="board" aria-pressed="false">Mural</button>
+  <button type="button" data-stop="window" aria-pressed="false">Janela</button>
+  <button type="button" data-stop="door" aria-pressed="false">Quarto</button>
+  <span class="tour-sep" aria-hidden="true"></span>
+  <button type="button" data-expand disabled>Ampliar</button>
+  <button type="button" data-newnote aria-label="Criar um post-it novo">+ Post-it</button>
+  <button type="button" data-sound aria-pressed="true" aria-label="Som ligado">♪ Som</button>
+</nav>
+
+<aside class="card" id="card" hidden aria-live="polite">
+  <button type="button" class="card-close" data-card-close aria-label="Fechar">×</button>
+  <p class="card-kicker" id="card-kicker"></p>
+  <h2 class="card-title" id="card-title"></h2>
+  <p class="card-body" id="card-body"></p>
+  <p class="card-links" id="card-links"></p>
+</aside>
+
+<div class="note-editor" id="note-editor" hidden role="dialog" aria-modal="false" aria-labelledby="note-editor-titulo">
+  <p class="note-editor-titulo" id="note-editor-titulo">Escreva no post-it</p>
+  <textarea id="note-texto" maxlength="90" rows="4" aria-label="Texto do post-it"></textarea>
+  <p class="note-editor-dica">Arraste o post-it no quarto para grudar em outro lugar. Fica salvo só neste navegador.</p>
+  <div class="note-editor-botoes">
+    <button type="button" class="btn-primary" data-note-save>Colar</button>
+    <button type="button" data-note-reset>Voltar ao recado original</button>
+    <button type="button" data-note-remove>Tirar daqui</button>
+    <button type="button" data-note-cancel>Cancelar</button>
   </div>
+</div>
 
-  <main>
+<dialog id="pc-dialog" aria-label="Computador ampliado">
+  <div class="pc-dialog-bar">
+    <span><span class="bar-title">AndreyOS 24 · ampliado</span><span class="rot-hint">Vire o celular de lado</span></span>
+    <button type="button" data-collapse aria-label="Voltar ao quarto">Voltar<span class="btn-long"> ao quarto</span> ↙</button>
+  </div>
+  <div class="pc-dialog-stage" id="pc-stage"></div>
+</dialog>
 
-    <section>
-      <h2>Sobre mim</h2>
-      <p class="about-text">
-        Olá! Sou o Andrey, estudante de Engenharia de Software no 3º período.
-        Tenho paixão por criar coisas com código — seja um site, um sistema ou um jogo.
-        Gosto de explorar novas tecnologias e entender como as coisas funcionam por baixo dos panos.
-        Acredito que a tecnologia pode transformar o mundo e quero fazer parte disso.
-      </p>
-    </section>
+<section id="conteudo-texto" class="text-fallback" tabindex="-1" aria-label="Conteúdo em texto">
+  <h1>Andrey Bueno</h1>
+  <p>Estudante de Engenharia de Software no 4º período, 24 anos. Gosto de criar coisas com código: sites, sistemas, jogos e peças impressas em 3D.</p>
+  <p>Este é o teaser do meu novo site: um quarto em 3D com um computador antigo que liga. Lá dentro tem o AndreyOS, com terminal, projetos e três jogos: Blocos, Noite dos Zumbis e Mini Mundo.</p>
+  <ul>
+    <li><a target="_blank" rel="noopener" href="https://andreybueno-git.github.io/vereda-ciclo-de-vida/">Vereda: apresentação 3D do ciclo de vida</a></li>
+    <li><a target="_blank" rel="noopener" href="https://andreybueno-git.github.io/projeto-g2-frontend/marco-3/">Projeto G2: kanban em Svelte (apresentação do Marco 3)</a></li>
+    <li><a target="_blank" rel="noopener" href="https://andreybueno-git.github.io/metadados-zero/">Metadados Zero</a></li>
+    <li><a target="_blank" rel="noopener" href="https://veredacerrado.com/">Vereda: a loja de luminárias impressas em 3D</a></li>
+    <li><a target="_blank" rel="noopener" href="https://brave-vapor-292.higgsfield.gg/">Kage no Toki: protótipo de jogo samurai em 3D</a></li>
+    <li><a target="_blank" rel="noopener" href="https://github.com/andreybueno-git/MercadoFinal">Tudo Tem Preço: jogo em Unity</a></li>
+  </ul>
+  <p>Contato: <a target="_blank" rel="noopener" href="https://github.com/andreybueno-git">GitHub</a> · <a target="_blank" rel="noopener" href="https://www.instagram.com/andreyb.bueno/">Instagram @andreyb.bueno</a></p>
+</section>
 
-    <section>
-      <h2>Tecnologias & Ferramentas</h2>
-      <div class="skill-grid">
-        <div class="skill-card"><span class="icon">🌐</span>HTML</div>
-        <div class="skill-card"><span class="icon">🎨</span>CSS</div>
-        <div class="skill-card"><span class="icon">⚡</span>JavaScript</div>
-        <div class="skill-card"><span class="icon">☕</span>Java</div>
-        <div class="skill-card"><span class="icon">🐍</span>Python</div>
-        <div class="skill-card"><span class="icon">🐱</span>Git & GitHub</div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Interesses</h2>
-      <div class="interest-list">
-        <div class="interest-item">
-          <div class="interest-icon">🎮</div>
-          <div class="interest-info">
-            <h3>Jogos</h3>
-            <p>Apaixonado por games — tanto jogar quanto entender como eles são feitos. Sonho em criar experiências interativas inovadoras.</p>
-          </div>
-        </div>
-        <div class="interest-item">
-          <div class="interest-icon">💡</div>
-          <div class="interest-info">
-            <h3>Inovação</h3>
-            <p>Sempre buscando novas formas de resolver problemas e criar soluções que façam diferença na vida das pessoas.</p>
-          </div>
-        </div>
-        <div class="interest-item">
-          <div class="interest-icon">🚀</div>
-          <div class="interest-info">
-            <h3>Tecnologia</h3>
-            <p>Fascinado pelo avanço tecnológico — de inteligência artificial a sistemas distribuídos, tudo me desperta curiosidade.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Em números</h2>
-      <div class="stats-row">
-        <div class="stat">
-          <span class="num">3º</span>
-          <span class="label">Período da Faculdade</span>
-        </div>
-        <div class="stat">
-          <span class="num">24</span>
-          <span class="label">Anos de idade</span>
-        </div>
-        <div class="stat">
-          <span class="num">∞</span>
-          <span class="label">Vontade de aprender</span>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    Feito com 💙 por <a href="https://github.com/deyy05" target="_blank">@deyy05</a>
-    &nbsp;·&nbsp;
-    <a href="https://github.com/deyy05" target="_blank">GitHub</a>
-  </footer>
-
+<script src="vendor/three.min.js"></script>
+<script src="vendor/GLTFLoader.js"></script>
+<script src="pc-glb.js"></script>
+<script src="blocos.js"></script>
+<script src="zumbis.js"></script>
+<script src="mundo.js"></script>
+<script src="desktop.js"></script>
+<script src="scene.js"></script>
+<script src="audio.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
