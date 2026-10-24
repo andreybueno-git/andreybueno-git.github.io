@@ -757,7 +757,7 @@
 .aos[data-theme="ambar"] .aos-record, .aos[data-theme="fosforo"] .aos-record,
 .aos[data-theme="ambar"] .aos-record b, .aos[data-theme="fosforo"] .aos-record b { color: var(--text); }
 .aos-cart-row { flex: 1; min-height: 0; display: flex; justify-content: center; align-items: center; gap: 28px; padding-bottom: 12px; }
-.aos-cartbox { width: 232px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.aos-cartbox { width: 232px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .aos-cartbox p { font-size: 21px; line-height: 1.05; color: #d7cde6; min-height: 44px; }
 .aos[data-theme="ambar"] .aos-cartbox p, .aos[data-theme="fosforo"] .aos-cartbox p { color: var(--text); }
 .aos-arcade-msg { flex: none; padding-top: 6px; font-size: 21px; line-height: 1.1; color: #c9bfd9; text-align: center; }

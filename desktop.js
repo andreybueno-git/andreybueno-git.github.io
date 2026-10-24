@@ -816,7 +816,7 @@
        Em cima do NOITE DOS ZUMBIS ele se esconde: o jogo desenha a própria mira no lugar. */
     const softCur = doc.createElement('div');
     softCur.className = 'aos-cursor'; softCur.setAttribute('aria-hidden', 'true');
-    const CLICAVEL = 'button, a, [role=button], [role=menuitem], .aos-icon, .aos-capi-btn, [data-open], [data-act], [data-play], [data-theme-pick], [data-file], [data-run-term], [data-link], [data-task]';
+    const CLICAVEL = 'button, a, [role=button], [role=menuitem], .aos-icon, .aos-capi-btn, .aos-cartbox, [data-open], [data-act], [data-play], [data-theme-pick], [data-file], [data-run-term], [data-link], [data-task]';
     function moveCursor(e) {
       if (e.pointerType && e.pointerType !== 'mouse') { el.classList.remove('has-soft-cursor'); return; }
       if (!softCur.isConnected) el.appendChild(softCur);
@@ -2150,6 +2150,9 @@
       if (di) { if (di.getAttribute('aria-disabled') !== 'true') runDrop(di.dataset.di); return; }
       const b = t.closest('[data-act],[data-open],[data-play],[data-theme-pick],[data-task],[data-run],[data-fill],[data-file],[data-run-term],[data-link],.aos-icon');
       if (!b) {
+        // O cartucho inteiro (arte, nome e descrição) joga: no celular o botão Jogar é minúsculo.
+        const cb = t.closest('.aos-cartbox');
+        if (cb && isGame(cb.dataset.cart)) { play(cb.dataset.cart, true); return; }
         // Clique no corpo do terminal leva o foco ao prompt (sem atrapalhar seleção de texto).
         const tw = t.closest('.aos-win--terminal .aos-winbody');
         const sel = global.getSelection ? String(global.getSelection()) : '';
